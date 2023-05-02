@@ -1,0 +1,35 @@
+@PACKAGE_INIT@
+
+# Check if the caller has already loaded a compatible version of ${PROJECT_NAME}.
+if(TARGET ${PROJECT_NAME}::${PROJECT_NAME}_shared
+   AND
+   TARGET ${PROJECT_NAME}::${PROJECT_NAME}_static)
+  return()
+endif()
+
+# Define the targets.
+if(TARGET ${PROJECT_NAME}_shared)
+  add_library(${PROJECT_NAME}::${PROJECT_NAME}_shared ALIAS ${PROJECT_NAME}_shared)
+endif()
+
+if(TARGET ${PROJECT_NAME}_static)
+  add_library(${PROJECT_NAME}::${PROJECT_NAME}_static ALIAS ${PROJECT_NAME}_static)
+endif()
+
+# Create imported target for common library.
+add_library(${PROJECT_NAME}::${PROJECT_NAME}_common INTERFACE IMPORTED)
+target_include_directories(${PROJECT_NAME}::${PROJECT_NAME}_common
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+# Set variables for use in dependent projects
+set(${PROJECT_NAME}_FOUND TRUE)
+set(${PROJECT_NAME}_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/../include")
+
+# Expose targets via namespace.
+export(TARGETS
+  ${installable_targets}
+  NAMESPACE ${PROJECT_NAME}::
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
+)

@@ -1,0 +1,9 @@
+PROJECT_NAME           = "${DOXY_PROJECT_NAME}"
+PROJECT_NUMBER         = "${PROJECT_VERSION}"
+PROJECT_BRIEF          = "${PROJECT_DESCRIPTION}"
+OUTPUT_DIRECTORY       = ${DOXY_OUTPUT_REL_PATH}
+INPUT                  = ${PROJECT_SOURCE_DIR}/include \
+                         ${PROJECT_SOURCE_DIR}/src
+RECURSIVE              = YES
+GENERATE_MAN           = ${DOXY_GENERATE_MAN}
+MAN_OUTPUT             = ${DOXY_MAN_REL_PATH}
